@@ -39,4 +39,4 @@ def predict():
 # ── 3. Launch dev server if run directly  ─────────────────────
 if __name__ == "__main__":
     # host 0.0.0.0 lets it listen inside containers too
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
