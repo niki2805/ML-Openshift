@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: sonar-scanner
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: run-sonar
+      image: sonarsource/sonar-scanner-cli
+      script: |
+        cd $(workspaces.source.path)
+        sonar-scanner \
+          -Dsonar.projectKey=flask-ci \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=https://your-sonar-url \
+          -Dsonar.login=$(SONAR_TOKEN)

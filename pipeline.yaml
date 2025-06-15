@@ -1,0 +1,58 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: flask-ci-pipeline
+spec:
+  params:
+    - name: repo-url
+    - name: image-url
+  workspaces:
+    - name: shared-data
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.repo-url)
+      workspaces:
+        - name: output
+          workspace: shared-data
+    - name: lint
+      runAfter: [fetch-source]
+      taskRef:
+        name: lint
+      workspaces:
+        - name: source
+          workspace: shared-data
+    - name: test
+      runAfter: [lint]
+      taskRef:
+        name: unit-tests
+      workspaces:
+        - name: source
+          workspace: shared-data
+    - name: build-image
+      runAfter: [test]
+      taskRef:
+        name: buildah
+      params:
+        - name: IMAGE
+          value: $(params.image-url)
+      workspaces:
+        - name: source
+          workspace: shared-data
+    - name: sonar-scan
+      runAfter: [build-image]
+      taskRef:
+        name: sonar-scanner
+      workspaces:
+        - name: source
+          workspace: shared-data
+    - name: deploy-to-dev
+      runAfter: [sonar-scan]
+      taskRef:
+        name: oc-deploy
+      workspaces:
+        - name: source
+          workspace: shared-data

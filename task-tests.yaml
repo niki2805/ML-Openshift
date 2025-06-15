@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: unit-tests
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: run-tests
+      image: python:3.9
+      script: |
+        #!/bin/sh
+        pip install pytest
+        cd $(workspaces.source.path)
+        pytest

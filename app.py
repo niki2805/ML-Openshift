@@ -3,13 +3,15 @@ import os
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Hello from Tekton CI Flask App!"
+
 @app.route('/info')
 def info():
-    db_url = os.getenv('DB_URL', 'Not set')
-    jwt_secret = os.getenv('JWT_SECRET', 'Not set')
     return jsonify({
-        "db_url": db_url,
-        "jwt_secret": jwt_secret
+        "db_url": os.getenv('DB_URL', 'Not set'),
+        "jwt_secret": os.getenv('JWT_SECRET', 'Not set')
     })
 
 if __name__ == '__main__':
