@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-python
-          image: python-image:latest
+          image: image-registry.openshift-image-registry.svc:5000/nikitam285-dev/python-app-docker:latest 
           ports:
             - name: http
               containerPort: 8081
