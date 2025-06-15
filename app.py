@@ -1,14 +1,10 @@
 from flask import Flask
-import os
-
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def hello():
-    return "Hello World!"
+    return "Hello from Flask on OpenShift 🚀"
 
-if __name__ == '__main__':
-    port = os.environ.get('FLASK_PORT') or 8081
-    port = int(port)
-
-    app.run(port=port,host='0.0.0.0')
+# OpenShift routes to port 8080 by default
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
